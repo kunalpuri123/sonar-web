@@ -1,12 +1,13 @@
 pipeline {
     agent any
     tools {
-        nodejs 'nodejs-20.11.0' 
+        nodejs 'nodejs-22.9.0' // Ensure this matches your Node.js version in Jenkins
     }
 
     environment {
-        NODEJS_HOME = 'C:/Program Files/nodejs'  
-        SONAR_SCANNER_PATH = 'C:/Users/ADMIN/Downloads/sonar-scanner-cli-6.2.1.4610-windows-x64/sonar-scanner-6.2.1.4610-windows-x64/bin'
+        // Set the correct paths for macOS
+        NODEJS_HOME = '/Users/kunalpuri/.nvm/versions/node/v22.9.0/bin'  // Path to Node.js
+        SONAR_SCANNER_PATH = '/opt/homebrew/bin/sonar-scanner'  // Path to sonar-scanner
     }
 
     stages {
@@ -19,8 +20,8 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 // Set the PATH and install dependencies using npm
-                bat '''
-                set PATH=%NODEJS_HOME%;%PATH%
+                sh '''
+                export PATH=$NODEJS_HOME:$PATH
                 npm install
                 '''
             }
@@ -29,8 +30,8 @@ pipeline {
         stage('Lint') {
             steps {
                 // Run linting to ensure code quality
-                bat '''
-                set PATH=%NODEJS_HOME%;%PATH%
+                sh '''
+                export PATH=$NODEJS_HOME:$PATH
                 npm run lint
                 '''
             }
@@ -39,8 +40,8 @@ pipeline {
         stage('Build') {
             steps {
                 // Build the React app
-                bat '''
-                set PATH=%NODEJS_HOME%;%PATH%
+                sh '''
+                export PATH=$NODEJS_HOME:$PATH
                 npm run build
                 '''
             }
@@ -48,17 +49,17 @@ pipeline {
 
         stage('SonarQube Analysis') {
             environment {
-                SONAR_TOKEN = credentials('Sonarqube-token') // Accessing the SonarQube token stored in Jenkins credentials
+                SONAR_TOKEN = credentials('sonar-token') // Accessing the SonarQube token stored in Jenkins credentials
             }
             steps {
                 // Ensure that sonar-scanner is in the PATH
-                bat '''
-                set PATH=%SONAR_SCANNER_PATH%;%PATH%
-                where sonar-scanner || echo "SonarQube scanner not found. Please install it."
-                sonar-scanner -Dsonar.projectKey=register-form ^
-                    -Dsonar.sources=. ^
-                    -Dsonar.host.url=http://localhost:9000 ^
-                    -Dsonar.token=%SONAR_TOKEN% 2>&1
+                sh '''
+                export PATH=$SONAR_SCANNER_PATH:$PATH
+                which sonar-scanner || echo "SonarQube scanner not found. Please install it."
+                sonar-scanner -Dsonar.projectKey=register-form \
+                    -Dsonar.sources=. \
+                    -Dsonar.host.url=http://localhost:9000 \
+                    -Dsonar.token=$SONAR_TOKEN
                 '''
             }
         }
