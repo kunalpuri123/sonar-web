@@ -70,7 +70,8 @@ pipeline {
                 sonar-scanner -Dsonar.projectKey=register-form \
                     -Dsonar.sources=. \
                     -Dsonar.host.url=http://localhost:9000 \
-                    -Dsonar.token=$SONAR_TOKEN
+                    -Dsonar.token=sqp_07ac1bfa9ad97d86caf9ce27980ebe657b0b2b30
+
                 '''
             }
         }
