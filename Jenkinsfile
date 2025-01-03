@@ -5,7 +5,7 @@ pipeline {
     }
 
     environment {
-        // Set the correct paths for macOS
+        // Set the correct paths for macOS or Docker containers
         NODEJS_HOME = '/Users/kunalpuri/.nvm/versions/node/v22.9.0/bin'  // Path to Node.js
         SONAR_SCANNER_PATH = '/opt/homebrew/bin/sonar-scanner'  // Path to sonar-scanner
     }
@@ -44,6 +44,17 @@ pipeline {
                 export PATH=$NODEJS_HOME:$PATH
                 npm run build
                 '''
+            }
+        }
+
+        stage('Wait for SonarQube') {
+            steps {
+                script {
+                    // Ensure SonarQube is up and running before starting analysis
+                    sh 'sleep 30'  // Adjust sleep time as needed
+                    // Optionally check SonarQube status
+                    sh 'curl -u admin:admin http://localhost:9000/api/server/version'
+                }
             }
         }
 
