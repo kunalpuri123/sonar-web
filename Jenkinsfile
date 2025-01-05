@@ -2,7 +2,6 @@ pipeline {
     agent any
     tools {
         nodejs 'nodejs-22.9.0' // Ensure this matches your Node.js version in Jenkins
-        sonarScanner 'sonarqube-scanner'
     }
 
     environment {
