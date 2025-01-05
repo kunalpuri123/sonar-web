@@ -56,8 +56,7 @@ pipeline {
             steps {
                 // Ensure that sonar-scanner is in the PATH
                 sh '''
-                export PATH=$SONAR_SCANNER_PATH:$PATH
-                which sonar-scanner || echo "SonarQube scanner not found. Please install it."
+                set PATH=%SONAR_SCANNER_PATH%;%PATH%
                 sonar-scanner -Dsonar.projectKey=pipe2 \
                     -Dsonar.sources=. \
                     -Dsonar.host.url=http://localhost:9000 \
