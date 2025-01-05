@@ -53,7 +53,7 @@ pipeline {
                     // Ensure SonarQube is up and running before starting analysis
                     sh 'sleep 30'  // Adjust sleep time as needed
                     // Optionally check SonarQube status
-                    sh 'curl -u admin:admin http://localhost:9000/api/server/version'
+                    sh 'curl -u admin:Admin@123456 http://localhost:9000/api/server/version'
                 }
             }
         }
