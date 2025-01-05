@@ -2,7 +2,7 @@ pipeline {
     agent any
     tools {
         nodejs 'nodejs-22.9.0'  // Ensure this matches your Node.js version in Jenkins
-        sonarScanner 'SonarQube Scanner' // Reference the scanner tool added in Global Tool Configuration
+      
     }
 
     environment {
@@ -26,12 +26,16 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                sh '''
-                sonar-scanner -Dsonar.projectKey=pipe2 \
-                    -Dsonar.sources=. \
-                    -Dsonar.host.url=http://localhost:9000 \
-                    -Dsonar.token=${SONAR_TOKEN}
-                '''
+                script {
+                    // Make sure SonarQube Scanner is available in the environment
+                    def scannerHome = tool name: 'SonarQubeScanner', type: 'SonarQubeScannerInstallation'
+                    sh """
+                    ${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=pipe2 \
+                        -Dsonar.sources=. \
+                        -Dsonar.host.url=http://localhost:9000 \
+                        -Dsonar.token=${SONAR_TOKEN}
+                    """
+                }
             }
         }
     }
