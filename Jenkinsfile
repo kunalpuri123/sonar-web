@@ -56,7 +56,7 @@ pipeline {
             steps {
                 // Ensure that sonar-scanner is in the PATH
                 sh '''
-                set PATH=%SONAR_SCANNER_PATH%;%PATH%
+                
                 sonar-scanner -Dsonar.projectKey=pipe2 \
                     -Dsonar.sources=. \
                     -Dsonar.host.url=http://localhost:9000 \
