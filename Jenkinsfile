@@ -47,16 +47,7 @@ pipeline {
             }
         }
 
-        stage('Wait for SonarQube') {
-            steps {
-                script {
-                    // Ensure SonarQube is up and running before starting analysis
-                    sh 'sleep 30'  // Adjust sleep time as needed
-                    // Optionally check SonarQube status
-                    sh 'curl -u admin:Admin@123456 http://localhost:9000/api/server/version'
-                }
-            }
-        }
+
 
         stage('SonarQube Analysis') {
             environment {
