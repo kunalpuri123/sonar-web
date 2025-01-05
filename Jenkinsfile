@@ -67,7 +67,7 @@ pipeline {
                 sh '''
                 export PATH=$SONAR_SCANNER_PATH:$PATH
                 which sonar-scanner || echo "SonarQube scanner not found. Please install it."
-                sonar-scanner -Dsonar.projectKey=register-form \
+                sonar-scanner -Dsonar.projectKey=pipe2 \
                     -Dsonar.sources=. \
                     -Dsonar.host.url=http://localhost:9000 \
                     -Dsonar.token=sqp_07ac1bfa9ad97d86caf9ce27980ebe657b0b2b30
